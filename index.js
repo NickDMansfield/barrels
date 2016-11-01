@@ -206,5 +206,7 @@ Barrels.prototype.populate = function(collections, done, autoAssociations) {
     // Create associations if requested
     if (autoAssociations)
       that.associate(collections, done);
+
+    done();
   });
 };
