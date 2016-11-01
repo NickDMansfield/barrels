@@ -47,6 +47,13 @@ function Barrels(sourceFolder) {
   this.modelNames = Object.keys(this.data);
 }
 
+
+Barrels.prototype.executePostAssociationUpdateActions = function(done) {
+  const postAssociation = require('./scripts/post-association.js');
+  postAssociation.actions(this);
+  done();
+};
+
 /**
  * Add associations
  * @param {function} done callback
@@ -101,7 +108,9 @@ Barrels.prototype.associate = function(collections, done) {
     } else {
       nextModel();
     }
-  }, done);
+  }, function () {
+    that.executePostAssociationUpdateActions(done);
+  });
 };
 
 /**
@@ -196,8 +205,6 @@ Barrels.prototype.populate = function(collections, done, autoAssociations) {
 
     // Create associations if requested
     if (autoAssociations)
-      return that.associate(collections, done);
-
-    done();
+      that.associate(collections, done);
   });
 };
